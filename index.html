@@ -3,101 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Norwegian Air Shuttle Booking System</title>
+    <title>Norwegian Air Shuttle</title>
     <style>
-        @font-face {
-            font-family: 'Apercu';
-            src: url('https://path-to-your-font/apercu.woff2') format('woff2');
-        }
-        body {
-            font-family: 'Apercu', sans-serif;
-            background-color: #f2f2f2;
-            color: #333;
+        body, html {
             margin: 0;
             padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-        }
-        .header {
-            background: #d71921;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-        }
-        .header h1 {
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0;
+            font-family: Arial, sans-serif;
         }
         .menu {
-            text-align: center;
-            background: #d71921;
-            padding: 10px;
-        }
-        .menu button {
-            background: white;
-            color: #d71921;
-            border: none;
+            display: flex;
+            align-items: center;
+            background-color: #f8f8f8;
             padding: 10px 20px;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .menu button:hover {
-            background: #f2f2f2;
+        .menu img {
+            height: 40px;
+        }
+        .menu-links {
+            margin-left: auto;
+            display: flex;
+        }
+        .menu-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+        }
+        .menu-links a:hover {
+            text-decoration: underline;
         }
         .section {
-            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px);
+            background: url('https://media.discordapp.net/attachments/1199072717043929088/1237828877133549650/hvtrs82F-mgdka2Cdksaopdcpr.png?ex=665c0cba&is=665abb3a&hm=30628ac8fcb3f03f6df42c1a2f0ea1045802b5f426030ab5a300b8629cf39eca&=&format=webp&quality=lossless&width=825&height=415') no-repeat center center;
+            background-size: cover;
+        }
+        .booking-form {
+            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
-            margin: 20px 0;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .admin-panel h2, .booking-system h2 {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-        .admin-panel input, .admin-panel select, .admin-panel button, .booking-system input, .booking-system button {
+        .booking-form input, .booking-form select, .booking-form button {
             display: block;
-            width: 80%;
-            margin: 10px auto;
+            width: 100%;
+            margin: 10px 0;
             padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 4px;
-        }
-        .admin-panel button, .booking-system button {
-            background: #d71921;
-            color: white;
-            border: none;
-        }
-        .admin-panel button:hover, .booking-system button:hover {
-            background: #b0171b;
-        }
-        .booking-system {
-            text-align: center;
-        }
-        .loading-spinner {
-            border: 8px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 8px solid #3498db;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
-            display: none;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .footer {
-            text-align: center;
-            padding: 20px 0;
-            font-size: 0.8em;
         }
         .popup {
             display: none;
@@ -107,188 +64,171 @@
             transform: translate(-50%, -50%);
             background: white;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .popup h2 {
-            margin-top: 0;
+            margin: 0 0 10px 0;
         }
-        .popup .close-btn {
-            background: #d9534f;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
+        .popup button {
+            display: block;
+            margin: 20px auto 0;
+        }
+        .admin-panel {
+            display: none;
+            padding: 20px;
+        }
+        .admin-panel form input, .admin-panel form select, .admin-panel form button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
             border-radius: 4px;
+        }
+        .flight-list {
+            margin: 20px 0;
+        }
+        .flight-item {
+            background: #f8f8f8;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .flight-item img {
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Norwegian Air Shuttle</h1>
-    </div>
     <div class="menu">
-        <button onclick="showPopup()">Home</button>
-        <button onclick="showPopup()">About Us</button>
-        <button onclick="showPopup()">Services</button>
-        <button onclick="showPopup()">Contact</button>
-    </div>
-
-    <div class="container">
-        <div class="section booking-system">
-            <h2>Book Your Flight</h2>
-            <div id="booking-step-1">
-                <label for="destination">Where do you want to go?</label>
-                <input type="text" id="destination" name="destination" placeholder="Enter destination">
-                <button onclick="nextStep(2)">Next</button>
-            </div>
-            <div id="booking-step-2" style="display:none;">
-                <label for="from">From where?</label>
-                <input type="text" id="from" name="from" placeholder="Enter departure location">
-                <button onclick="nextStep(3)">Next</button>
-            </div>
-            <div id="booking-step-3" style="display:none;">
-                <label for="date">When?</label>
-                <input type="date" id="booking-date" name="date">
-                <button onclick="searchFlights()">Search Flights</button>
-            </div>
-            <div id="loading-spinner" class="loading-spinner"></div>
-            <div id="search-results" style="display:none;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Flight Number</th>
-                            <th>Airline</th>
-                            <th>Departure</th>
-                            <th>Arrival</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="results-body"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="section admin-panel">
-            <h2>Admin Panel - Staff Login</h2>
-            <input type="password" id="admin-password" placeholder="Enter Password">
-            <button onclick="login()">Login</button>
-
-            <div id="admin-content" style="display:none;">
-                <h3>Create Flight</h3>
-                <form id="create-flight-form" onsubmit="event.preventDefault(); createFlight();">
-                    <label for="flight-number">Flight Number:</label>
-                    <input type="text" id="flight-number" name="flight-number" required><br>
-                    <label for="airline">Airline:</label>
-                    <select id="airline" name="airline" required>
-                        <option value="norwegian-air-shuttle">Norwegian Air Shuttle</option>
-                        <option value="wideroe">Wideroe</option>
-                        <option value="norwegian-long-haul">Norwegian Long Haul</option>
-                    </select><br>
-                    <label for="departure">Departure:</label>
-                    <input type="text" id="departure" name="departure" required><br>
-                    <label for="arrival">Arrival:</label>
-                    <input type="text" id="arrival" name="arrival" required><br>
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" required><br>
-                    <label for="time">Time:</label>
-                    <input type="time" id="time" name="time" required><br>
-                    <button type="submit">Create Flight</button>
-                </form>
-            </div>
+        <img src="https://media.canva.com/v2/image-resize/format:PNG/height:366/quality:100/uri:s3%3A%2F%2Fmedia-private.canva.com%2FxfUzY%2FMAGFIRxfUzY%2F1%2Fp.png/watermark:F/width:550?csig=AAAAAAAAAAAAAAAAAAAAAD1fNlQBo5gX6N0cFP5oTyBmPtpImXo-_iZrD1wwgFIS&exp=1717269888&osig=AAAAAAAAAAAAAAAAAAAAAIkHRqI4iXNvJ9qrEzBTJQ6a6XAAleEvS6TDiY0B5hd7&signer=media-rpc&x-canva-quality=thumbnail_large" alt="Norwegian Air Shuttle">
+        <div class="menu-links">
+            <a href="#" onclick="showPopup()">Home</a>
+            <a href="#" onclick="showPopup()">About</a>
+            <a href="#" onclick="showPopup()">Contact</a>
         </div>
     </div>
-
-    <div class="footer">
-        <p>&copy; 2024 Norwegian Air Shuttle. All rights reserved.</p>
+    <div class="section">
+        <div class="booking-form">
+            <h2>Book a Flight</h2>
+            <select id="from">
+                <option value="" disabled selected>From</option>
+                <option value="Oslo">Oslo</option>
+                <option value="Bergen">Bergen</option>
+                <option value="Trondheim">Trondheim</option>
+            </select>
+            <select id="to">
+                <option value="" disabled selected>To</option>
+                <option value="Stockholm">Stockholm</option>
+                <option value="Copenhagen">Copenhagen</option>
+                <option value="London">London</option>
+            </select>
+            <input type="date" id="date">
+            <button onclick="searchFlights()">Search</button>
+        </div>
     </div>
-
-    <div id="popup" class="popup">
-        <h2>Coming Soon</h2>
-        <p>This feature is not done yet.</p>
-        <button class="close-btn" onclick="closePopup()">Close</button>
+    <div class="popup" id="menuPopup">
+        <h2>Notice</h2>
+        <p>This feature is not yet available.</p>
+        <button onclick="closePopup()">Close</button>
     </div>
-
+    <div class="popup" id="loadingPopup">
+        <h2>Loading...</h2>
+    </div>
+    <div class="popup" id="flightsPopup">
+        <h2>Available Flights</h2>
+        <div class="flight-list" id="flightList"></div>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    <div class="popup" id="bookingPopup">
+        <h2>Booking Information</h2>
+        <input type="text" id="robloxUsername" placeholder="Roblox Username">
+        <input type="text" id="discordUsername" placeholder="Discord Username">
+        <button onclick="confirmBooking()">Confirm Booking</button>
+    </div>
+    <div class="popup" id="confirmationPopup">
+        <h2>Booking Confirmed!</h2>
+        <p>Thank you for booking with Norwegian Air Shuttle.</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    <div class="popup" id="adminPopup">
+        <h2>Admin Login</h2>
+        <input type="password" id="adminPassword" placeholder="Password">
+        <button onclick="loginAdmin()">Login</button>
+    </div>
+    <div class="admin-panel" id="adminPanel">
+        <h2>Add a Flight</h2>
+        <form onsubmit="addFlight(event)">
+            <input type="text" id="flightNumber" placeholder="Flight Number" required>
+            <input type="text" id="fromAdmin" placeholder="From" required>
+            <input type="text" id="toAdmin" placeholder="To" required>
+            <input type="datetime-local" id="dateTimeAdmin" required>
+            <select id="airlineAdmin" required>
+                <option value="" disabled selected>Select Airline</option>
+                <option value="wideroe">Widerøe</option>
+                <option value="norwegian-air-shuttle">Norwegian Air Shuttle</option>
+                <option value="norwegian-long-haul">Norwegian Long Haul</option>
+            </select>
+            <button type="submit">Add Flight</button>
+        </form>
+        <h2>Available Flights</h2>
+        <div class="flight-list" id="adminFlightList"></div>
+    </div>
     <script>
-        let flights = [];
+        let flights = JSON.parse(localStorage.getItem('flights')) || [];
+        let bookedFlights = JSON.parse(localStorage.getItem('bookedFlights')) || [];
 
-        function login() {
-            const password = document.getElementById('admin-password').value;
-            if (password === 'norwegianontop2024') {
-                document.getElementById('admin-content').style.display = 'block';
-            } else {
-                alert('Incorrect Password');
-            }
+        function showPopup() {
+            document.getElementById('menuPopup').style.display = 'block';
         }
 
-        function createFlight() {
-            const flightNumber = document.getElementById('flight-number').value;
-            const airline = document.getElementById('airline').value;
-            const departure = document.getElementById('departure').value;
-            const arrival = document.getElementById('arrival').value;
-            const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
-
-            const flight = {
-                flightNumber,
-                airline,
-                departure,
-                arrival,
-                date,
-                time
-            };
-
-            flights.push(flight);
-            alert('Flight Created Successfully!');
-            document.getElementById('create-flight-form').reset();
-        }
-
-        function nextStep(step) {
-            document.getElementById(`booking-step-${step - 1}`).style.display = 'none';
-            document.getElementById(`booking-step-${step}`).style.display = 'block';
+        function closePopup() {
+            document.querySelectorAll('.popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
         }
 
         function searchFlights() {
-            document.getElementById('loading-spinner').style.display = 'block';
+            document.getElementById('loadingPopup').style.display = 'block';
             setTimeout(() => {
-                document.getElementById('loading-spinner').style.display = 'none';
-                document.getElementById('search-results').style.display = 'block';
-
-                const destination = document.getElementById('destination').value;
-                const from = document.getElementById('from').value;
-                const date = document.getElementById('booking-date').value;
-
-                const resultsBody = document.getElementById('results-body');
-                resultsBody.innerHTML = '';
-
-                const filteredFlights = flights.filter(flight => flight.arrival === destination && flight.departure === from && flight.date === date);
-
-                if (filteredFlights.length > 0) {
-                    filteredFlights.forEach(flight => {
-                        resultsBody.innerHTML += `
-                            <tr>
-                                <td>${flight.flightNumber}</td>
-                                <td><img src="${getAirlineIcon(flight.airline)}" alt="${flight.airline}" style="width: 30px;"></td>
-                                <td>${flight.departure}</td>
-                                <td>${flight.arrival}</td>
-                                <td>${flight.date}</td>
-                                <td>${flight.time}</td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    resultsBody.innerHTML = '<tr><td colspan="6">No flights available for the selected route and date.</td></tr>';
-                }
+                document.getElementById('loadingPopup').style.display = 'none';
+                displayFlights();
             }, 2000);
         }
 
+        function displayFlights() {
+            const from = document.getElementById('from').value;
+            const to = document.getElementById('to').value;
+            const date = document.getElementById('date').value;
+
+            const filteredFlights = flights.filter(flight => flight.from === from && flight.to === to && flight.date.startsWith(date));
+            const flightList = document.getElementById('flightList');
+            flightList.innerHTML = '';
+
+            filteredFlights.forEach(flight => {
+                const flightItem = document.createElement('div');
+                flightItem.className = 'flight-item';
+                flightItem.innerHTML = `
+                    <img src="${getAirlineIcon(flight.airline)}" alt="${flight.airline}">
+                    <strong>${flight.flightNumber}</strong> - ${flight.from} to ${flight.to} on ${flight.date}
+                    <br>This flight is operated by ${flight.airline.replace('-', ' ')}
+                    <button onclick="bookFlight('${flight.flightNumber}')">Book</button>
+                `;
+                flightList.appendChild(flightItem);
+            });
+
+            document.getElementById('flightsPopup').style.display = 'block';
+        }
+
         function getAirlineIcon(airline) {
-            switch (airline) {
-                case 'norwegian-air-shuttle':
-                    return 'https://media.discordapp.net/attachments/1239917885099475035/1246478164952223754/DeWatermark.ai_1717253912410-removebg-preview.png?ex=665c88c0&is=665b3740&hm=41ec0503eb7de6dc73c908d93cdf4ded6babe066f80b1092bfe2630d71dbdd48&=&format=webp&quality=lossless&width=655&height=655';
+            switch(airline) {
                 case 'wideroe':
                     return 'https://media.canva.com/v2/image-resize/format:PNG/height:500/quality:100/uri:s3%3A%2F%2Fmedia-private.canva.com%2Fdkqc4%2FMAGFgxdkqc4%2F1%2Fp.png/watermark:F/width:500?csig=AAAAAAAAAAAAAAAAAAAAABvuHEIoxYT29zAMhDx9dGwj7wZnNan2l60YYq-08Wl7&exp=1717271228&osig=AAAAAAAAAAAAAAAAAAAAAK0RzHDAHWhSvE9xu3Z7PirmDvTEIdqEPOQsPKbk7Adi&signer=media-rpc&x-canva-quality=thumbnail_large';
+                case 'norwegian-air-shuttle':
                 case 'norwegian-long-haul':
                     return 'https://media.discordapp.net/attachments/1239917885099475035/1246478164952223754/DeWatermark.ai_1717253912410-removebg-preview.png?ex=665c88c0&is=665b3740&hm=41ec0503eb7de6dc73c908d93cdf4ded6babe066f80b1092bfe2630d71dbdd48&=&format=webp&quality=lossless&width=655&height=655';
                 default:
@@ -296,13 +236,85 @@
             }
         }
 
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
+        function bookFlight(flightNumber) {
+            if (bookedFlights.includes(flightNumber)) {
+                alert('You have already booked this flight.');
+                return;
+            }
+            document.getElementById('bookingPopup').style.display = 'block';
+            document.getElementById('bookingPopup').dataset.flightNumber = flightNumber;
         }
 
-        function showPopup() {
-            document.getElementById('popup').style.display = 'block';
+        function confirmBooking() {
+            const flightNumber = document.getElementById('bookingPopup').dataset.flightNumber;
+            const robloxUsername = document.getElementById('robloxUsername').value;
+            const discordUsername = document.getElementById('discordUsername').value;
+
+            bookedFlights.push(flightNumber);
+            localStorage.setItem('bookedFlights', JSON.stringify(bookedFlights));
+
+            fetch('https://discord.com/api/webhooks/1246775797579124849/m0s6yKr6-mRDtUBAz4slTOmBGfbqBAcL52RgC2yd_YJyHOmeM_ml-LGROJ5olRlbdf0W', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    embeds: [{
+                        title: 'New Booking',
+                        fields: [
+                            { name: 'Flight Number', value: flightNumber },
+                            { name: 'Roblox Username', value: robloxUsername },
+                            { name: 'Discord Username', value: discordUsername }
+                        ]
+                    }]
+                })
+            });
+
+            document.getElementById('confirmationPopup').style.display = 'block';
+            closePopup();
+        }
+
+        function loginAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === 'norwegianontop2024') {
+                document.getElementById('adminPopup').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                displayAdminFlights();
+            } else {
+                alert('Incorrect password');
+            }
+        }
+
+        function addFlight(event) {
+            event.preventDefault();
+            const flightNumber = document.getElementById('flightNumber').value;
+            const from = document.getElementById('fromAdmin').value;
+            const to = document.getElementById('toAdmin').value;
+            const date = document.getElementById('dateTimeAdmin').value;
+            const airline = document.getElementById('airlineAdmin').value;
+
+            flights.push({ flightNumber, from, to, date, airline });
+            localStorage.setItem('flights', JSON.stringify(flights));
+
+            displayAdminFlights();
+        }
+
+        function displayAdminFlights() {
+            const adminFlightList = document.getElementById('adminFlightList');
+            adminFlightList.innerHTML = '';
+
+            flights.forEach(flight => {
+                const flightItem = document.createElement('div');
+                flightItem.className = 'flight-item';
+                flightItem.innerHTML = `
+                    <img src="${getAirlineIcon(flight.airline)}" alt="${flight.airline}">
+                    <strong>${flight.flightNumber}</strong> - ${flight.from} to ${flight.to} on ${flight.date}
+                    <br>This flight is operated by ${flight.airline.replace('-', ' ')}
+                `;
+                adminFlightList.appendChild(flightItem);
+            });
         }
     </script>
 </body>
 </html>
+
